@@ -56,6 +56,40 @@ Visit `http://localhost:3000` to see your app!
 
 ### Quick Deploy to Vercel (Recommended)
 
+**Important**: Vercel doesn't provide databases, so you'll need an external SQL database.
+
+🗄️ **Database Setup Guide**: [DATABASE_SETUP.md](./DATABASE_SETUP.md)  
+🏗️ **Architecture Overview**: [ARCHITECTURE.md](./ARCHITECTURE.md)
+
+#### Step 1: Set up your database (Choose one)
+
+**Option A: Supabase (PostgreSQL - Recommended)**
+```bash
+# 1. Go to supabase.com → Sign up → Create project
+# 2. Get PostgreSQL connection string
+# 3. Update Prisma schema to use PostgreSQL
+# 4. Add to Vercel environment variables
+```
+
+**Option B: Railway (MySQL/PostgreSQL)**
+```bash
+# 1. Go to railway.app → Create MySQL service
+# 2. Copy connection string  
+# 3. Add to Vercel environment variables
+```
+
+**Option C: Turso (SQLite)**
+```bash
+# 1. Go to turso.tech → Create database
+# 2. Get connection string
+# 3. Update Prisma schema to use SQLite
+```
+# 2. Copy connection string
+# 3. Add to Vercel environment variables
+```
+
+#### Step 2: Deploy to Vercel
+
 1. **Push to GitHub**
    ```bash
    git add .
@@ -66,7 +100,7 @@ Visit `http://localhost:3000` to see your app!
 2. **Deploy to Vercel**
    - Go to [vercel.com](https://vercel.com)
    - Import your GitHub repository
-   - Add environment variables
+   - Add environment variables (including DATABASE_URL)
    - Deploy!
 
 3. **Configure Clerk**
