@@ -3,7 +3,8 @@
 import { updateProfile } from "@/lib/actions";
 import { User } from "@prisma/client";
 import Image from "next/image";
-import { useActionState, useState } from "react";
+import { useState } from "react";
+import { useFormState } from "react-dom";
 import { CldUploadWidget } from "next-cloudinary";
 import { useRouter } from "next/navigation";
 import UpdateButton from "./UpdateButton";
@@ -13,7 +14,7 @@ const UpdateUser = ({ user }: { user: User }) => {
   const [open, setOpen] = useState(false);
   const [cover, setCover] = useState<any>(false);
 
-  const [state, formAction] = useActionState(updateProfile,{success:false,error:false});
+  const [state, formAction] = useFormState(updateProfile,{success:false,error:false});
 
   const router = useRouter();
 

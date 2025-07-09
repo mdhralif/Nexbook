@@ -3,7 +3,8 @@
 import { switchLike } from "@/lib/actions";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
-import { useOptimistic, useState } from "react";
+import { useState } from "react";
+import { useOptimistic } from "@/lib/hooks";
 
 const PostInteraction = ({
   postId,

@@ -5,7 +5,8 @@ import { useUser } from "@clerk/nextjs";
 import { Story, User } from "@prisma/client";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
-import { useOptimistic, useState } from "react";
+import { useState } from "react";
+import { useOptimistic } from "@/lib/hooks";
 
 type StoryWithUser = Story & {
   user: User;

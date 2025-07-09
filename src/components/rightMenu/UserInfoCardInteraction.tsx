@@ -1,7 +1,8 @@
 "use client"
 
 import { switchBlock, switchFollow } from "@/lib/actions";
-import { useOptimistic, useState } from "react";
+import { useState } from "react";
+import { useOptimistic } from "@/lib/hooks";
 
 const UserInfoCardInteraction = ({
     userId,

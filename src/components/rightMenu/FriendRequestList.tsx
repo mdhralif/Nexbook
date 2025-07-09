@@ -3,7 +3,8 @@
 import { acceptFollowRequest, declineFollowRequest } from "@/lib/actions";
 import { FollowRequest, User } from "@prisma/client";
 import Image from "next/image";
-import { useOptimistic, useState } from "react";
+import { useState } from "react";
+import { useOptimistic } from "@/lib/hooks";
 
 
 type RequestWithUser = FollowRequest & {
