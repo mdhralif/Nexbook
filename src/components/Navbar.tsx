@@ -1,5 +1,7 @@
 import Link from "next/link";
 import MobileMenu from "./MobileMenu";
+import SearchBar from "./SearchBar";
+import MobileSearchBar from "./MobileSearchBar";
 import Image from "next/image";
 import {
   ClerkLoaded,
@@ -33,7 +35,7 @@ const Navbar = () => {
             <span>Homepage</span>
           </Link>
           
-          <Link href="https://realtime-chat-application-6o6.pages.dev/" target="_blank"className="flex items-center gap-2">
+          <Link href="https://nexchat-8ufl.onrender.com/" target="_blank" className="flex items-center gap-2">
             <Image
               src="/messages.png"
               alt="Stories"
@@ -44,13 +46,11 @@ const Navbar = () => {
             <span>Chat</span>
           </Link>
         </div>
-        <div className='hidden xl:flex p-2 bg-slate-100 items-center rounded-xl'>
-          <input type="text" placeholder="search..." className="bg-transparent outline-none"/>
-          <Image src="/search.png" alt="" width={14} height={14}/>
-        </div>
+        <SearchBar />
       </div>
       {/* RIGHT */}
       <div className="w-[30%] flex items-center gap-4 xl:gap-8 justify-end">
+        <MobileSearchBar />
         <ClerkLoading>
           <div className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-gray-500 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white" />
         </ClerkLoading>

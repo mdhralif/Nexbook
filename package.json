@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.1.6",
     "@prisma/client": "^5.15.0",
+    "axios": "^1.7.2",
     "babel-plugin-react-compiler": "^0.0.0-experimental-938cd9a-20240601",
     "mysql": "^2.18.1",
     "next": "15.0.0-rc.0",

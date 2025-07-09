@@ -5,6 +5,35 @@ import prisma from "./client";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 
+// Utility function to ensure user exists in database
+export const ensureUserExists = async (userId: string, userData?: any) => {
+    try {
+        // Check if user already exists
+        const existingUser = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (existingUser) {
+            return existingUser;
+        }
+
+        // Create user if doesn't exist
+        const newUser = await prisma.user.create({
+            data: {
+                id: userId,
+                username: userData?.username || userData?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || `user_${userId.slice(-8)}`,
+                avatar: userData?.imageUrl || "/noAvatar.png",
+                cover: "/noCover.png"
+            }
+        });
+
+        return newUser;
+    } catch (error) {
+        console.error('Error ensuring user exists:', error);
+        throw error;
+    }
+};
+
 export const switchFollow = async (userId: string) => {
     const { userId: currentUserId } = auth();
 
@@ -344,5 +373,4 @@ export const switchBlock = async (userId: string) => {
       console.log(err);
     }
   };
-  
-  
+

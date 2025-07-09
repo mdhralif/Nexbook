@@ -53,40 +53,55 @@ export async function POST(req: Request) {
     // For this guide, you simply log the payload to the console
     const { id } = evt.data;
     const eventType = evt.type;
-    //   console.log(`Webhook with and ID of ${id} and type of ${eventType}`)
-    //   console.log('Webhook body:', body)
+    console.log(`Webhook received with ID: ${id} and type: ${eventType}`);
+    console.log('Full webhook data:', JSON.stringify(evt.data, null, 2));
 
     if (eventType === "user.created") {
         try {
+            console.log('Creating user with data:', {
+                id: evt.data.id,
+                username: evt.data.username,
+                avatar: evt.data.image_url || "/noAvatar.png",
+                cover: "/noCover.png"
+            });
+            
             await prisma.user.create({
                 data: {
                     id: evt.data.id,
-                    username: JSON.parse(body).data.username,
-                    avatar: JSON.parse(body).data.image_url || "/noAvatar.png",
+                    username: evt.data.username || evt.data.email_addresses?.[0]?.email_address?.split('@')[0] || `user_${evt.data.id.slice(-8)}`,
+                    avatar: evt.data.image_url || "/noAvatar.png",
                     cover: "/noCover.png"
                 }
             })
+            console.log('User created successfully');
             return new Response("User created", { status: 200 });
         } catch (err) {
-            console.log(err)
+            console.error('Error creating user:', err);
             return new Response('Error creating user', { status: 500 });
         }
     }
 
     if (eventType === "user.updated") {
         try {
+            console.log('Updating user with data:', {
+                id: evt.data.id,
+                username: evt.data.username,
+                avatar: evt.data.image_url || "/noAvatar.png"
+            });
+            
             await prisma.user.update({
                 where:{
                     id: evt.data.id
                 },
                 data: {
-                    username: JSON.parse(body).data.username,
-                    avatar: JSON.parse(body).data.image_url || "/noAvatar.png"
+                    username: evt.data.username || evt.data.email_addresses?.[0]?.email_address?.split('@')[0] || `user_${evt.data.id.slice(-8)}`,
+                    avatar: evt.data.image_url || "/noAvatar.png"
                 }
             })
+            console.log('User updated successfully');
             return new Response("User updated", { status: 200 });
         } catch (err) {
-            console.log(err)
+            console.error('Error updating user:', err);
             return new Response('Error updating user', { status: 500 });
         }
     }
