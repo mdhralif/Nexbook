@@ -52,7 +52,7 @@ A modern social media platform built with Next.js, featuring real-time interacti
 
 Visit `http://localhost:3000` to see your app!
 
-## 🌐 Deployment
+## 🌐 Deployment___
 
 ### Quick Deploy to Vercel (Recommended)
 
