@@ -81,7 +81,7 @@ const MobileSearchBar = () => {
     };
 
     return (
-        <div className="relative xl:hidden" ref={searchRef}>
+        <div className="relative lg:hidden flex-shrink-0" ref={searchRef}>
             {!showSearchInput ? (
                 <div
                     className="cursor-pointer"
