@@ -65,12 +65,14 @@ const Navbar = () => {
             <div className="cursor-pointer hidden md:block">
               <Image src="/notifications.png" alt="" width={20} height={20} />
             </div>
-            <UserButton />
+            <div className="hidden md:block">
+              <UserButton />
+            </div>
           </SignedIn>
           <SignedOut>
             <div className="flex items-center gap-2 text-sm">
               <Image src="/login.png" alt="" width={20} height={20} className="hidden sm:block" />
-              <Link href="/sign-in" className="text-xs sm:text-sm">Login/Register</Link>
+              <Link href="/sign-in" className="text-xs sm:text-sm hidden md:block">Login/Register</Link>
             </div>
           </SignedOut>
         </ClerkLoaded>
