@@ -1,11 +1,13 @@
 import Feed from "@/components/feed/Feed";
 import LeftMenu from "@/components/leftMenu/LeftMenu";
 import RightMenu from "@/components/rightMenu/RightMenu";
+import UserInfoCard from "@/components/rightMenu/UserInfoCard";
 
 import prisma from "@/lib/client";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
 
@@ -84,6 +86,13 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
                 <span className="text-sm">Following</span>
               </div>
             </div>
+          </div>
+
+          {/* Mobile UserInfoCard - Show follow buttons on mobile */}
+          <div className="lg:hidden">
+            <Suspense fallback={<div className="p-4 bg-white rounded-lg shadow-md text-sm">Loading...</div>}>
+              <UserInfoCard user={user} />
+            </Suspense>
           </div>
 
           <Feed username={user.username} />
