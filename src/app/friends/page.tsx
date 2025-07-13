@@ -21,11 +21,12 @@ const FriendsPage = async () => {
   });
 
   return (
-    <div className="flex justify-center pt-6">
-      <div className="w-full max-w-4xl px-4">
-        <div className="flex flex-col gap-6">
-          {/* Header */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="min-h-screen bg-slate-100">
+      <div className="flex justify-center pt-6">
+        <div className="w-full max-w-4xl px-4">
+          <div className="flex flex-col gap-6">
+            {/* Header */}
+            <div className="bg-white rounded-lg shadow-md p-6">
             <h1 className="text-2xl font-bold text-gray-800 mb-2">Friends</h1>
             <p className="text-gray-600">Manage your friend requests and connections</p>
           </div>
@@ -58,6 +59,7 @@ const FriendsPage = async () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
