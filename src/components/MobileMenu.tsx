@@ -72,7 +72,6 @@ const MobileMenu = ({ friendRequestCount = 0 }: MobileMenuProps) => {
                 <span className="text-xs mt-1">Login</span>
               </Link>
             </SignedOut>
-            <span className="text-xs mt-1">Profile</span>
           </div>
         </div>
       </div>
