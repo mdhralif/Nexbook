@@ -14,6 +14,17 @@ const AddPost = () => {
   const [desc, setDesc] = useState("");
   const [img, setImg] = useState<any>();
 
+  const handleFormAction = async (formData: FormData) => {
+    await addPost(formData, img?.secure_url || "");
+    // Clear the form after successful post
+    setDesc("");
+    setImg(null);
+  };
+
+  const removeImage = () => {
+    setImg(null);
+  };
+
   if (!isLoaded) {
     return "Loading...";
   }
@@ -31,11 +42,12 @@ const AddPost = () => {
       {/* POST */}
       <div className="flex-1">
         {/* TEXT INPUT */}
-        <form action={(formData)=>addPost(formData,img?.secure_url || "")} className="flex gap-4">
+        <form action={handleFormAction} className="flex gap-4">
           <textarea
             placeholder="What's on your mind?"
             className="flex-1 bg-slate-100 rounded-lg p-2"
             name="desc"
+            value={desc}
             onChange={(e) => setDesc(e.target.value)}
           ></textarea>
           <div className="">
@@ -49,6 +61,29 @@ const AddPost = () => {
             <AddPostButton />
           </div>
         </form>
+        
+        {/* UPLOADED IMAGE PREVIEW */}
+        {img && (
+          <div className="mt-4 relative">
+            <div className="relative inline-block">
+              <Image
+                src={img.secure_url}
+                alt="Uploaded image"
+                width={200}
+                height={200}
+                className="rounded-lg object-cover max-w-full h-auto"
+              />
+              <button
+                type="button"
+                onClick={removeImage}
+                className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                title="Remove image"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
         {/* POST OPTIONS */}
         <div className="flex items-center gap-4 mt-4 text-gray-400 flex-wrap">
           <CldUploadWidget
