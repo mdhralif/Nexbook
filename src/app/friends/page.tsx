@@ -3,6 +3,9 @@ import { Suspense } from "react";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import FollowButton from "@/components/FollowButton";
 
 const FriendsPage = async () => {
   const { userId } = auth();
@@ -18,6 +21,52 @@ const FriendsPage = async () => {
     include: {
       sender: true,
     },
+  });
+
+  // Get current user's friends (people they follow who also follow them back)
+  const friends = await prisma.user.findMany({
+    where: {
+      followers: {
+        some: {
+          followerId: userId,
+        },
+      },
+      followings: {
+        some: {
+          followingId: userId,
+        },
+      },
+    },
+    orderBy: {
+      name: 'asc',
+    },
+  });
+
+  // Get all users except current user and exclude friends
+  const friendIds = friends.map(friend => friend.id);
+  const suggestions = await prisma.user.findMany({
+    where: {
+      id: {
+        not: userId,
+        notIn: friendIds,
+      },
+    },
+    include: {
+      followers: {
+        where: {
+          followerId: userId,
+        },
+      },
+      followRequestsReceived: {
+        where: {
+          senderId: userId,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc', // Show newest users first
+    },
+    take: 20, // Show more users for now
   });
 
   return (
@@ -56,6 +105,119 @@ const FriendsPage = async () => {
                 <p className="text-gray-500 text-sm">When someone sends you a friend request, it will appear here.</p>
               </div>
             )}
+          </div>
+
+          {/* Friends */}
+          <div className="bg-white rounded-lg shadow-md">
+            <div className="p-4">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                Your Friends ({friends.length})
+              </h2>
+              {friends.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {friends.map((friend) => (
+                    <Link
+                      key={friend.id}
+                      href={`/profile/${friend.username}`}
+                      className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <Image
+                        src={friend.avatar || "/noAvatar.png"}
+                        alt={friend.name || friend.username}
+                        width={48}
+                        height={48}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div className="ml-3 flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {friend.name && friend.surname
+                            ? `${friend.name} ${friend.surname}`
+                            : friend.username}
+                        </p>
+                        <p className="text-sm text-gray-500 truncate">@{friend.username}</p>
+                        {friend.city && (
+                          <p className="text-xs text-gray-400 truncate">{friend.city}</p>
+                        )}
+                      </div>
+                      <div className="ml-2 flex-shrink-0">
+                        <span className="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                          Friends
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="text-gray-400 text-lg mb-2">No friends yet</div>
+                  <p className="text-gray-500 text-sm">
+                    When you and another user follow each other, you&apos;ll become friends and appear here.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Suggestions */}
+          <div className="bg-white rounded-lg shadow-md">
+            <div className="p-4">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                People You May Know
+              </h2>
+              {suggestions.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {suggestions.map((user) => {
+                    const isFollowing = user.followers.length > 0;
+                    const hasPendingRequest = user.followRequestsReceived.length > 0;
+                    
+                    return (
+                      <div
+                        key={user.id}
+                        className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        <Link
+                          href={`/profile/${user.username}`}
+                          className="flex items-center flex-1 min-w-0"
+                        >
+                          <Image
+                            src={user.avatar || "/noAvatar.png"}
+                            alt={user.name || user.username}
+                            width={48}
+                            height={48}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                          <div className="ml-3 flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900 truncate">
+                              {user.name && user.surname
+                                ? `${user.name} ${user.surname}`
+                                : user.username}
+                            </p>
+                            <p className="text-sm text-gray-500 truncate">@{user.username}</p>
+                            {user.city && (
+                              <p className="text-xs text-gray-400 truncate">{user.city}</p>
+                            )}
+                          </div>
+                        </Link>
+                        <div className="ml-2 flex-shrink-0">
+                          <FollowButton
+                            userId={user.id}
+                            isFollowing={isFollowing}
+                            hasPendingRequest={hasPendingRequest}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="text-gray-400 text-lg mb-2">No suggestions available</div>
+                  <p className="text-gray-500 text-sm">
+                    We&apos;ll show people you might know here when they join.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
