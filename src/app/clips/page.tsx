@@ -82,16 +82,6 @@ const ClipsPage = () => {
             
             {/* Tabs */}
             <div className="flex gap-4 mb-4">
-              <button
-                onClick={handleTrendingClick}
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  activeTab === 'trending'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                🔥 Trending
-              </button>
               <div className="flex-1">
                 <form onSubmit={handleSearch} className="flex gap-2">
                   <input
@@ -99,11 +89,11 @@ const ClipsPage = () => {
                     placeholder="Search for videos..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     Search
                   </button>
