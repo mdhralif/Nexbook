@@ -80,18 +80,16 @@ const FriendsPage = async () => {
         <div className="w-full max-w-4xl px-4">
           <div className="flex flex-col gap-6">
             {/* Header */}
-            <div className="bg-white rounded-lg shadow-md p-6">
             <h1 className="text-2xl font-bold text-gray-800 mb-2">Friends</h1>
-            <p className="text-gray-600">Manage your friend requests and connections</p>
-          </div>
+
 
           {/* Friend Requests */}
           <div className="bg-white rounded-lg shadow-md">
-            {requests.length > 0 ? (
-              <div className="p-4">
-                <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                  Friend Requests ({requests.length})
-                </h2>
+            <div className="p-4">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                Follow Requests ({requests.length})
+              </h2>
+              {requests.length > 0 ? (
                 <Suspense fallback={
                   <div className="animate-pulse">
                     <div className="space-y-3">
@@ -103,72 +101,13 @@ const FriendsPage = async () => {
                 }>
                   <FriendRequestWrapper requests={requests} />
                 </Suspense>
-              </div>
-            ) : (
-              <div className="p-8 text-center">
-                <div className="text-gray-400 text-lg mb-2">No friend requests</div>
-                <p className="text-gray-500 text-sm">When someone sends you a friend request, it will appear here.</p>
-              </div>
-            )}
-          </div>
-
-          {/* Following */}
-          <div className="bg-white rounded-lg shadow-md">
-            <div className="p-4">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                Following ({following.length})
-              </h2>
-              {following.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {following.map((user) => (
-                    <div
-                      key={user.id}
-                      className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <Link
-                        href={`/profile/${user.username}`}
-                        className="flex items-center flex-1 min-w-0"
-                      >
-                        <Image
-                          src={user.avatar || "/noAvatar.png"}
-                          alt={user.name || user.username}
-                          width={48}
-                          height={48}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                        <div className="ml-3 flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
-                            {user.name && user.surname
-                              ? `${user.name} ${user.surname}`
-                              : user.username}
-                          </p>
-                          <p className="text-sm text-gray-500 truncate">@{user.username}</p>
-                          {user.city && (
-                            <p className="text-xs text-gray-400 truncate">{user.city}</p>
-                          )}
-                        </div>
-                      </Link>
-                      <div className="ml-2 flex-shrink-0">
-                        <FollowButtonWrapper
-                          userId={user.id}
-                          isFollowing={true}
-                          hasPendingRequest={false}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
               ) : (
-                <div className="text-center py-8">
-                  <div className="text-gray-400 text-lg mb-2">Not following anyone yet</div>
-                  <p className="text-gray-500 text-sm">
-                    When you follow someone, they&apos;ll appear here.
-                  </p>
+                <div className="text-center py-4">
+                  <p className="text-gray-500 text-sm">When someone follows you, it will appear here.</p>
                 </div>
               )}
             </div>
           </div>
-
           {/* Suggestions */}
           <div className="bg-white rounded-lg shadow-md">
             <div className="p-4">
@@ -222,7 +161,7 @@ const FriendsPage = async () => {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <div className="text-gray-400 text-lg mb-2">No suggestions available</div>
+                  {/* <div className="text-gray-400 text-lg mb-2">No suggestions available</div> */}
                   <p className="text-gray-500 text-sm">
                     We&apos;ll show people you might know here when they join.
                   </p>
@@ -230,6 +169,65 @@ const FriendsPage = async () => {
               )}
             </div>
           </div>
+
+          {/* Following */}
+          <div className="bg-white rounded-lg shadow-md">
+            <div className="p-4">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                Following ({following.length})
+              </h2>
+              {following.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {following.map((user) => (
+                    <div
+                      key={user.id}
+                      className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <Link
+                        href={`/profile/${user.username}`}
+                        className="flex items-center flex-1 min-w-0"
+                      >
+                        <Image
+                          src={user.avatar || "/noAvatar.png"}
+                          alt={user.name || user.username}
+                          width={48}
+                          height={48}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                        <div className="ml-3 flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {user.name && user.surname
+                              ? `${user.name} ${user.surname}`
+                              : user.username}
+                          </p>
+                          <p className="text-sm text-gray-500 truncate">@{user.username}</p>
+                          {user.city && (
+                            <p className="text-xs text-gray-400 truncate">{user.city}</p>
+                          )}
+                        </div>
+                      </Link>
+                      <div className="ml-2 flex-shrink-0">
+                        <FollowButtonWrapper
+                          userId={user.id}
+                          isFollowing={true}
+                          hasPendingRequest={false}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  {/* <div className="text-gray-400 text-lg mb-2">Not following anyone yet</div> */}
+                  <p className="text-gray-500 text-sm">
+                    When you follow someone, they&apos;ll appear here.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          
         </div>
       </div>
     </div>
