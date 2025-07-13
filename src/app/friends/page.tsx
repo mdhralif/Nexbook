@@ -23,32 +23,22 @@ const FriendsPage = async () => {
     },
   });
 
-  // Get current user's friends (people they follow who also follow them back)
-  const friends = await prisma.user.findMany({
+  // Also get users with pending requests to exclude them from suggestions
+  const pendingRequestUsers = await prisma.followRequest.findMany({
     where: {
-      followers: {
-        some: {
-          followerId: userId,
-        },
-      },
-      followings: {
-        some: {
-          followingId: userId,
-        },
-      },
+      senderId: userId,
     },
-    orderBy: {
-      name: 'asc',
+    select: {
+      receiverId: true,
     },
   });
-
-  // Get all users except current user and exclude friends
-  const friendIds = friends.map(friend => friend.id);
+  const pendingRequestIds = pendingRequestUsers.map(req => req.receiverId);
+  
   const suggestions = await prisma.user.findMany({
     where: {
       id: {
         not: userId,
-        notIn: friendIds,
+        notIn: pendingRequestIds,
       },
     },
     include: {
@@ -105,57 +95,6 @@ const FriendsPage = async () => {
                 <p className="text-gray-500 text-sm">When someone sends you a friend request, it will appear here.</p>
               </div>
             )}
-          </div>
-
-          {/* Friends */}
-          <div className="bg-white rounded-lg shadow-md">
-            <div className="p-4">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                Your Friends ({friends.length})
-              </h2>
-              {friends.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {friends.map((friend) => (
-                    <Link
-                      key={friend.id}
-                      href={`/profile/${friend.username}`}
-                      className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <Image
-                        src={friend.avatar || "/noAvatar.png"}
-                        alt={friend.name || friend.username}
-                        width={48}
-                        height={48}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                      <div className="ml-3 flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {friend.name && friend.surname
-                            ? `${friend.name} ${friend.surname}`
-                            : friend.username}
-                        </p>
-                        <p className="text-sm text-gray-500 truncate">@{friend.username}</p>
-                        {friend.city && (
-                          <p className="text-xs text-gray-400 truncate">{friend.city}</p>
-                        )}
-                      </div>
-                      <div className="ml-2 flex-shrink-0">
-                        <span className="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
-                          Friends
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <div className="text-gray-400 text-lg mb-2">No friends yet</div>
-                  <p className="text-gray-500 text-sm">
-                    When you and another user follow each other, you&apos;ll become friends and appear here.
-                  </p>
-                </div>
-              )}
-            </div>
           </div>
 
           {/* Suggestions */}
