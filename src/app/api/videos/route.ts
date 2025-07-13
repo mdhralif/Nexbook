@@ -17,7 +17,10 @@ export async function GET(request: NextRequest) {
       videos = await YouTubeService.searchVideos(query, maxResults, pageToken);
     }
 
-    return NextResponse.json(videos);
+    return NextResponse.json({
+      items: videos.items,
+      nextPageToken: videos.nextPageToken,
+    });
   } catch (error) {
     console.error('API Error:', error);
     return NextResponse.json(

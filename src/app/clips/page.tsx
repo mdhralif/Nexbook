@@ -67,7 +67,7 @@ const ClipsPage = () => {
   };
 
   return (
-    <div className="flex gap-6 pt-6">
+    <div className="flex gap-0 pt-0">
       {/* LEFT */}
       <div className="hidden xl:block w-[20%]">
         {/* Left sidebar content can go here later */}
@@ -75,25 +75,25 @@ const ClipsPage = () => {
       
       {/* CENTER */}
       <div className="w-full lg:w-[70%] xl:w-[50%]">
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-0">
           {/* Page Header */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">Clips</h1>
+          <div className="bg-white rounded shadow-md p-1">
+            <h1 className="text-md font-bold text-gray-800 mb-0">Clips</h1>
             
             {/* Tabs */}
-            <div className="flex gap-4 mb-4">
+            <div className="flex gap-0 mb-0">
               <div className="flex-1">
-                <form onSubmit={handleSearch} className="flex gap-2">
+                <form onSubmit={handleSearch} className="flex gap-0">
                   <input
                     type="text"
                     placeholder="Search for videos..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    className="flex-1 px-1 py-0 text-xs border border-gray-300 focus:outline-none focus:border-blue-500"
                   />
                   <button
                     type="submit"
-                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-1 py-0 text-xs bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                   >
                     Search
                   </button>
@@ -101,26 +101,26 @@ const ClipsPage = () => {
               </div>
             </div>
             
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-xs mb-0">
               {activeTab === 'trending' ? 'Discover trending videos' : `Search results for "${searchQuery}"`}
             </p>
           </div>
           
           {/* Videos Grid */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-white shadow-md p-0">
             {loading && (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="mt-2 text-gray-500">Loading clips...</p>
+              <div className="text-center py-1">
+                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-0 text-gray-500 text-xs">Loading clips...</p>
               </div>
             )}
             
             {error && (
-              <div className="text-center py-8">
-                <p className="text-red-500 mb-4">{error}</p>
+              <div className="text-center py-1">
+                <p className="text-red-500 mb-0 text-xs">{error}</p>
                 <button
                   onClick={() => fetchVideos(searchQuery || undefined, activeTab)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="px-1 py-0 text-xs bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                 >
                   Try Again
                 </button>
@@ -128,13 +128,13 @@ const ClipsPage = () => {
             )}
             
             {!loading && !error && videos.length === 0 && (
-              <div className="text-center py-8">
-                <p className="text-gray-500">No videos found</p>
+              <div className="text-center py-1">
+                <p className="text-gray-500 text-xs">No videos found</p>
               </div>
             )}
             
             {!loading && !error && videos.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-0">
                 {videos.map((video, index) => (
                   <VideoCard
                     key={`${video.id.videoId}-${index}`}

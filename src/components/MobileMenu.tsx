@@ -26,13 +26,13 @@ const MobileMenu = ({ friendRequestCount = 0 }: MobileMenuProps) => {
             />
             <span className="text-xs mt-1">Home</span>
           </Link>
-          <Link href="/clips" className={`flex flex-col items-center p-2 ${pathname === '/clips' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}>
+          <Link href="/clips/autoplay" className={`flex flex-col items-center p-2 ${pathname === '/clips' || pathname === '/clips/autoplay' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}>
             <Image 
               src="/clips.png" 
               alt="Clips" 
               width={24} 
               height={24}
-              className={`${pathname === '/clips' ? 'brightness-0 saturate-100 hue-rotate-210' : ''}`}
+              className={`${pathname === '/clips' || pathname === '/clips/autoplay' ? 'brightness-0 saturate-100 hue-rotate-210' : ''}`}
             />
             <span className="text-xs mt-1">Clips</span>
           </Link>
