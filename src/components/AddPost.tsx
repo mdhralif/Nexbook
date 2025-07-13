@@ -44,7 +44,7 @@ const AddPost = () => {
               alt=""
               width={20}
               height={20}
-              className="w-5 h-5 cursor-pointer self-end"
+              className="hidden md:w-5 h-5 cursor-pointer self-end"
             />
             <AddPostButton />
           </div>
@@ -74,11 +74,11 @@ const AddPost = () => {
             <Image src="/addVideo.png" alt="" width={20} height={20} />
             Video
           </div>
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="hidden md:flex items-center gap-2 cursor-pointer">
             <Image src="/poll.png" alt="" width={20} height={20} />
             Poll
           </div>
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="hidden md:flex items-center gap-2 cursor-pointer">
             <Image src="/addevent.png" alt="" width={20} height={20} />
             Event
           </div>
