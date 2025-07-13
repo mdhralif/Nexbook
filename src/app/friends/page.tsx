@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import FollowButton from "@/components/FollowButton";
+import FollowButtonWrapper from "@/components/FollowButtonWrapper";
 
 const FriendsPage = async () => {
   const { userId } = auth();
@@ -23,6 +24,17 @@ const FriendsPage = async () => {
     },
   });
 
+  // Get users that current user is following
+  const followingRelations = await prisma.follower.findMany({
+    where: {
+      followerId: userId,
+    },
+    include: {
+      following: true,
+    },
+  });
+  const following = followingRelations.map(relation => relation.following);
+
   // Also get users with pending requests to exclude them from suggestions
   const pendingRequestUsers = await prisma.followRequest.findMany({
     where: {
@@ -34,11 +46,14 @@ const FriendsPage = async () => {
   });
   const pendingRequestIds = pendingRequestUsers.map(req => req.receiverId);
   
+  // Get following user IDs to exclude from suggestions
+  const followingIds = following.map(user => user.id);
+  
   const suggestions = await prisma.user.findMany({
     where: {
       id: {
         not: userId,
-        notIn: pendingRequestIds,
+        notIn: [...pendingRequestIds, ...followingIds],
       },
     },
     include: {
@@ -97,6 +112,63 @@ const FriendsPage = async () => {
             )}
           </div>
 
+          {/* Following */}
+          <div className="bg-white rounded-lg shadow-md">
+            <div className="p-4">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                Following ({following.length})
+              </h2>
+              {following.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {following.map((user) => (
+                    <div
+                      key={user.id}
+                      className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <Link
+                        href={`/profile/${user.username}`}
+                        className="flex items-center flex-1 min-w-0"
+                      >
+                        <Image
+                          src={user.avatar || "/noAvatar.png"}
+                          alt={user.name || user.username}
+                          width={48}
+                          height={48}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                        <div className="ml-3 flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {user.name && user.surname
+                              ? `${user.name} ${user.surname}`
+                              : user.username}
+                          </p>
+                          <p className="text-sm text-gray-500 truncate">@{user.username}</p>
+                          {user.city && (
+                            <p className="text-xs text-gray-400 truncate">{user.city}</p>
+                          )}
+                        </div>
+                      </Link>
+                      <div className="ml-2 flex-shrink-0">
+                        <FollowButtonWrapper
+                          userId={user.id}
+                          isFollowing={true}
+                          hasPendingRequest={false}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="text-gray-400 text-lg mb-2">Not following anyone yet</div>
+                  <p className="text-gray-500 text-sm">
+                    When you follow someone, they&apos;ll appear here.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Suggestions */}
           <div className="bg-white rounded-lg shadow-md">
             <div className="p-4">
@@ -138,7 +210,7 @@ const FriendsPage = async () => {
                           </div>
                         </Link>
                         <div className="ml-2 flex-shrink-0">
-                          <FollowButton
+                          <FollowButtonWrapper
                             userId={user.id}
                             isFollowing={isFollowing}
                             hasPendingRequest={hasPendingRequest}
