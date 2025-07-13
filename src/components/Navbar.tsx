@@ -37,8 +37,8 @@ const Navbar = () => {
         <ClerkLoaded>
           <SignedIn>
             <FriendsLink />
-            <div className="cursor-pointer hidden md:block">
-            </div>
+            {/* <div className="cursor-pointer hidden md:block">
+            </div> */}
             {/* <div className="cursor-pointer hidden md:block">
               <Image src="/messages.png" alt="" width={20} height={20} />
             </div> */}
