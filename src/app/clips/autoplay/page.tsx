@@ -123,7 +123,7 @@ const AutoPlayClipsPage = () => {
 
   if (loading && videos.length === 0) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-white -mx-4 md:mx-0 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-800">Loading clips...</p>
@@ -134,7 +134,7 @@ const AutoPlayClipsPage = () => {
 
   if (error && videos.length === 0) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-white -mx-4 md:mx-0 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
           <button
@@ -149,7 +149,7 @@ const AutoPlayClipsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white -mx-4 md:mx-0">
       {/* Header */}
       <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
         <div className="flex items-center justify-between p-4">
