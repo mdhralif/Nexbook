@@ -4,7 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
-const MobileMenu = () => {
+interface MobileMenuProps {
+  friendRequestCount?: number;
+}
+
+const MobileMenu = ({ friendRequestCount = 0 }: MobileMenuProps) => {
   return (
     <>
       {/* Fixed bottom navigation for mobile */}
@@ -14,8 +18,15 @@ const MobileMenu = () => {
             <Image src="/home.png" alt="Home" width={24} height={24} />
             <span className="text-xs mt-1">Home</span>
           </Link>
-          <Link href="/" className="flex flex-col items-center p-2 text-gray-600 hover:text-blue-600">
-            <Image src="/people.png" alt="Friends" width={24} height={24} />
+          <Link href="/friends" className="flex flex-col items-center p-2 text-gray-600 hover:text-blue-600 relative">
+            <div className="relative">
+              <Image src="/people.png" alt="Friends" width={24} height={24} />
+              {friendRequestCount > 0 && (
+                <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {friendRequestCount > 9 ? '9+' : friendRequestCount}
+                </div>
+              )}
+            </div>
             <span className="text-xs mt-1">Friends</span>
           </Link>
           <Link href="https://nexchat-8ufl.onrender.com/" target="_blank" className="flex flex-col items-center p-2 text-gray-600 hover:text-blue-600">

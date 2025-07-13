@@ -1,5 +1,5 @@
 import Link from "next/link";
-import MobileMenu from "./MobileMenu";
+import MobileMenuWrapper from "./MobileMenuWrapper";
 import SearchBar from "./SearchBar";
 import MobileSearchBar from "./MobileSearchBar";
 import Image from "next/image";
@@ -76,7 +76,7 @@ const Navbar = () => {
             </div>
           </SignedOut>
         </ClerkLoaded>
-        <MobileMenu />
+        <MobileMenuWrapper />
       </div>
     </div>
   );
