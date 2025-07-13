@@ -3,6 +3,8 @@ import MobileMenuWrapper from "./MobileMenuWrapper";
 import SearchBar from "./SearchBar";
 import MobileSearchBar from "./MobileSearchBar";
 import Image from "next/image";
+import NavLinks from "./NavLinks";
+import FriendsLink from "./FriendsLink";
 import {
   ClerkLoaded,
   ClerkLoading,
@@ -23,29 +25,7 @@ const Navbar = () => {
       {/* CENTER */}
       <div className="md:flex w-[50%] text-sm items-center justify-between">
         {/* LINKS */}
-        <div className="hidden md:flex w-[50%]  gap-6 text-gray-600">
-          <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/home.png"
-              alt="Homepage"
-              width={16}
-              height={16}
-              className="w-4 h-4"
-            />
-            <span>Homepage</span>
-          </Link>
-          
-          <Link href="https://nexchat-8ufl.onrender.com/" target="_blank" className="flex items-center gap-2">
-            <Image
-              src="/messages.png"
-              alt="Stories"
-              width={16}
-              height={16}
-              className="w-4 h-4"
-            />
-            <span>Chat</span>
-          </Link>
-        </div>
+        <NavLinks />
         <SearchBar />
       </div>
       {/* RIGHT */}
@@ -56,12 +36,12 @@ const Navbar = () => {
         </ClerkLoading>
         <ClerkLoaded>
           <SignedIn>
-            <div className="cursor-pointer hidden sm:block">
-              <Image src="/people.png" alt="" width={24} height={24} />
-            </div>
+            <FriendsLink />
             <div className="cursor-pointer hidden md:block">
-              <Image src="/messages.png" alt="" width={20} height={20} />
             </div>
+            {/* <div className="cursor-pointer hidden md:block">
+              <Image src="/messages.png" alt="" width={20} height={20} />
+            </div> */}
             <div className="cursor-pointer hidden md:block">
               <Image src="/notifications.png" alt="" width={20} height={20} />
             </div>
