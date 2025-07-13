@@ -11,7 +11,12 @@ type RequestWithUser = FollowRequest & {
     sender: User;
 };
 
-const FriendRequestList = ({ requests }: { requests: RequestWithUser[] }) => {
+interface FriendRequestListProps {
+    requests: RequestWithUser[];
+    onRequestAction?: () => void;
+}
+
+const FriendRequestList = ({ requests, onRequestAction }: FriendRequestListProps) => {
 
     const [requestState, setRequestState] = useState(requests);
 
@@ -20,6 +25,8 @@ const FriendRequestList = ({ requests }: { requests: RequestWithUser[] }) => {
         try {
             await acceptFollowRequest(userId);
             setRequestState((prev) => prev.filter((req) => req.id !== requestId));
+            // Call the callback to refresh parent component
+            onRequestAction?.();
         } catch (err) { }
     };
     const decline = async (requestId: number, userId: string) => {
@@ -27,6 +34,8 @@ const FriendRequestList = ({ requests }: { requests: RequestWithUser[] }) => {
         try {
             await declineFollowRequest(userId);
             setRequestState((prev) => prev.filter((req) => req.id !== requestId));
+            // Call the callback to refresh parent component
+            onRequestAction?.();
         } catch (err) { }
     };
 

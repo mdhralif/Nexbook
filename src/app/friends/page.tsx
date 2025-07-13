@@ -1,4 +1,4 @@
-import FriendRequestList from "@/components/rightMenu/FriendRequestList";
+import FriendRequestWrapper from "@/components/FriendRequestWrapper";
 import { Suspense } from "react";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
@@ -86,7 +86,7 @@ const FriendsPage = async () => {
                     </div>
                   </div>
                 }>
-                  <FriendRequestList requests={requests} />
+                  <FriendRequestWrapper requests={requests} />
                 </Suspense>
               </div>
             ) : (
