@@ -26,6 +26,16 @@ const MobileMenu = ({ friendRequestCount = 0 }: MobileMenuProps) => {
             />
             <span className="text-xs mt-1">Home</span>
           </Link>
+          <Link href="/clips" className={`flex flex-col items-center p-2 ${pathname === '/clips' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}>
+            <Image 
+              src="/clips.png" 
+              alt="Clips" 
+              width={24} 
+              height={24}
+              className={`${pathname === '/clips' ? 'brightness-0 saturate-100 hue-rotate-210' : ''}`}
+            />
+            <span className="text-xs mt-1">Clips</span>
+          </Link>
           <Link href="/friends" className={`flex flex-col items-center p-2 relative ${pathname === '/friends' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}>
             <div className="relative">
               <Image 
@@ -47,10 +57,11 @@ const MobileMenu = ({ friendRequestCount = 0 }: MobileMenuProps) => {
             <Image src="/messages.png" alt="Messages" width={24} height={24} />
             <span className="text-xs mt-1">Chat</span>
           </Link>
-          <Link href="/" className="flex flex-col items-center p-2 text-gray-600 hover:text-blue-600">
+          
+          {/* <Link href="/" className="flex flex-col items-center p-2 text-gray-600 hover:text-blue-600">
             <Image src="/notifications.png" alt="Notifications" width={24} height={24} />
             <span className="text-xs mt-1">Alerts</span>
-          </Link>
+          </Link> */}
           <div className="flex flex-col items-center p-2 text-gray-600">
             <SignedIn>
               <UserButton />
