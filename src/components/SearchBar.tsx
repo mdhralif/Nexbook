@@ -35,7 +35,7 @@ const SearchBar = () => {
 
     useEffect(() => {
         const searchUsers = async () => {
-            if (query.trim().length < 2) {
+            if (query.trim().length < 1) {
                 setUsers([]);
                 setIsOpen(false);
                 return;
@@ -43,7 +43,7 @@ const SearchBar = () => {
 
             setIsLoading(true);
             try {
-                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                const response = await fetch(`/api/search?q=${encodeURIComponent(query.trim())}`);
                 const data = await response.json();
                 setUsers(data.users || []);
                 setIsOpen(true);
@@ -55,7 +55,7 @@ const SearchBar = () => {
             }
         };
 
-        const debounceTimer = setTimeout(searchUsers, 300);
+        const debounceTimer = setTimeout(searchUsers, 200); // Reduced debounce time for faster response
         return () => clearTimeout(debounceTimer);
     }, [query]);
 
@@ -120,7 +120,7 @@ const SearchBar = () => {
                                 </div>
                             </div>
                         ))
-                    ) : query.trim().length >= 2 ? (
+                    ) : query.trim().length >= 1 ? (
                         <div className="p-4 text-center text-gray-500 text-sm">
                             No users found for &quot;{query}&quot;
                         </div>
