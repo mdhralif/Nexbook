@@ -46,7 +46,7 @@ const FollowButton = ({ userId, isFollowing, hasPendingRequest }: FollowButtonPr
 
   const getButtonStyles = () => {
     if (followState.isFollowing) {
-      return "bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700";
+      return "bg-blue-500 text-white hover:bg-red-100 hover:text-red-700";
     }
     if (followState.hasPendingRequest) {
       return "bg-yellow-100 text-yellow-700 hover:bg-yellow-200";
