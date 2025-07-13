@@ -5,6 +5,7 @@ import PostInteraction from "./PostInteraction";
 import { Suspense } from "react";
 import PostInfo from "./PostInfo";
 import { auth } from "@clerk/nextjs/server";
+import Link from "next/link";
 
 
 type FeedPostType = PostType & { user: User } & {
@@ -21,18 +22,22 @@ const Post = ({ post }: { post: FeedPostType }) => {
             {/* USER */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <Image
-                        src={post.user.avatar || "/noAvatar.png"}
-                        width={40}
-                        height={40}
-                        alt=""
-                        className="w-10 h-10 rounded-full"
-                    />
-                    <span className="font-medium">
-                        {post.user.name && post.user.surname
-                            ? post.user.name + " " + post.user.surname
-                            : post.user.username}
-                    </span>
+                    <Link href={`/profile/${post.user.username}`}>
+                        <Image
+                            src={post.user.avatar || "/noAvatar.png"}
+                            width={40}
+                            height={40}
+                            alt=""
+                            className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                        />
+                    </Link>
+                    <Link href={`/profile/${post.user.username}`} className="hover:underline">
+                        <span className="font-medium cursor-pointer">
+                            {post.user.name && post.user.surname
+                                ? post.user.name + " " + post.user.surname
+                                : post.user.username}
+                        </span>
+                    </Link>
                 </div>
                 {userId === post.user.id && <PostInfo postId={post.id} />}
             </div>

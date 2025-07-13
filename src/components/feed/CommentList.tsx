@@ -6,6 +6,7 @@ import { Comment, User } from "@prisma/client";
 import Image from "next/image";
 import { useState } from "react";
 import { useOptimistic } from "@/lib/hooks";
+import Link from "next/link";
 type CommentWithUser = Comment & { user: User };
 
 const CommentList = ({
@@ -90,20 +91,24 @@ const CommentList = ({
                 {optimisticComments.map((comment) => (
                     <div className="flex gap-4 justify-between mt-6" key={comment.id}>
                         {/* AVATAR */}
-                        <Image
-                            src={comment.user.avatar || "noAvatar.png"}
-                            alt=""
-                            width={40}
-                            height={40}
-                            className="w-10 h-10 rounded-full"
-                        />
+                        <Link href={`/profile/${comment.user.username}`}>
+                            <Image
+                                src={comment.user.avatar || "noAvatar.png"}
+                                alt=""
+                                width={40}
+                                height={40}
+                                className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                            />
+                        </Link>
                         {/* DESC */}
                         <div className="flex flex-col gap-2 flex-1">
-                            <span className="font-medium">
-                                {comment.user.name && comment.user.surname
-                                    ? comment.user.name + " " + comment.user.surname
-                                    : comment.user.username}
-                            </span>
+                            <Link href={`/profile/${comment.user.username}`} className="hover:underline">
+                                <span className="font-medium cursor-pointer">
+                                    {comment.user.name && comment.user.surname
+                                        ? comment.user.name + " " + comment.user.surname
+                                        : comment.user.username}
+                                </span>
+                            </Link>
                             <p>{comment.desc}</p>
                             <div className="flex items-center gap-8 text-xs text-gray-500 mt-2">
                                 <div className="flex items-center gap-4">
