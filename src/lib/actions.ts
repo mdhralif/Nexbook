@@ -292,15 +292,24 @@ export const switchBlock = async (userId: string) => {
   export const addPost = async (formData: FormData, img: string) => {
     const desc = formData.get("desc") as string;
   
-    const Desc = z.string().min(1).max(255);
+    // Allow empty description but enforce max length if provided
+    const Desc = z.string().max(255).optional();
   
-    const validatedDesc = Desc.safeParse(desc);
+    const validatedDesc = Desc.safeParse(desc || "");
   
     if (!validatedDesc.success) {
-      //TODO
       console.log("description is not valid");
       return;
     }
+
+    // Ensure user has either text or image
+    const hasContent = (desc && desc.trim().length > 0) || img;
+    
+    if (!hasContent) {
+      console.log("Post must have either text or image");
+      return;
+    }
+
     const { userId } = auth();
   
     if (!userId) throw new Error("User is not authenticated!");
@@ -308,7 +317,7 @@ export const switchBlock = async (userId: string) => {
     try {
       await prisma.post.create({
         data: {
-          desc: validatedDesc.data,
+          desc: validatedDesc.data || "",
           userId,
           img,
         },
