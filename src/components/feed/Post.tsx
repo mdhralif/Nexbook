@@ -39,11 +39,12 @@ const Post = ({ post }: { post: FeedPostType }) => {
             {/* DESC */}
             <div className="flex flex-col gap-4">
                 {post.img && (
-                    <div className="w-full min-h-96 relative">
+                    <div className="w-full relative">
                         <Image
                             src={post.img}
-                            fill
-                            className="object-cover rounded-md"
+                            width={600}
+                            height={400}
+                            className="w-full h-auto rounded-md object-contain max-h-96"
                             alt=""
                         />
                     </div>
