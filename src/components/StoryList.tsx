@@ -24,8 +24,20 @@ const StoryList = ({
   const [img, setImg] = useState<any>();
   const [selectedStoryIndex, setSelectedStoryIndex] = useState<number | null>(null);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   const { user, isLoaded } = useUser();
+
+  const handleImageError = (imageUrl: string) => {
+    setImageErrors(prev => new Set([...prev, imageUrl]));
+  };
+
+  const getImageSrc = (imageUrl: string | null | undefined, fallback: string = "/noAvatar.png") => {
+    if (!imageUrl || imageErrors.has(imageUrl)) {
+      return fallback;
+    }
+    return imageUrl;
+  };
 
   const add = async () => {
     if (!img?.secure_url) return;
@@ -79,8 +91,12 @@ const StoryList = ({
       <CldUploadWidget
         uploadPreset="social"
         onSuccess={(result, { widget }) => {
+          console.log("Upload successful:", result.info);
           setImg(result.info);
           widget.close();
+        }}
+        onError={(error) => {
+          console.error("Upload error:", error);
         }}
       >
         {({ open }) => {
@@ -90,11 +106,13 @@ const StoryList = ({
               onClick={() => open()}
             >
               <Image
-                src={img?.secure_url || user?.imageUrl || "/noAvatar.png"}
+                src={getImageSrc(img?.secure_url || user?.imageUrl, "/noAvatar.png")}
                 alt=""
                 width={80}
                 height={80}
                 className="w-20 h-20 rounded-full ring-2 object-cover pointer-events-none"
+                onError={() => handleImageError(img?.secure_url || user?.imageUrl || "")}
+                priority
               />
               {img ? (
                 <form action={add} onClick={(e) => e.stopPropagation()}>
@@ -120,11 +138,13 @@ const StoryList = ({
         >
           <div className="relative">
             <Image
-              src={story.user.avatar || "/noAvatar.png"}
+              src={getImageSrc(story.user.avatar, "/noAvatar.png")}
               alt=""
               width={80}
               height={80}
               className="w-20 h-20 rounded-full ring-2 ring-blue-500 object-cover"
+              onError={() => handleImageError(story.user.avatar || "")}
+              priority
             />
             {/* Story ring indicator */}
             <div className="absolute inset-0 rounded-full ring-2 ring-blue-500 ring-offset-2"></div>

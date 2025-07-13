@@ -19,10 +19,22 @@ const StoryViewer = ({ stories, initialStoryIndex, isOpen, onClose }: StoryViewe
   const [currentStoryIndex, setCurrentStoryIndex] = useState(initialStoryIndex);
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const STORY_DURATION = 5000; // 5 seconds
 
   const currentStory = stories[currentStoryIndex];
+
+  const handleImageError = (imageUrl: string) => {
+    setImageErrors(prev => new Set([...prev, imageUrl]));
+  };
+
+  const getImageSrc = (imageUrl: string | null | undefined, fallback: string = "/noAvatar.png") => {
+    if (!imageUrl || imageErrors.has(imageUrl)) {
+      return fallback;
+    }
+    return imageUrl;
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -133,11 +145,12 @@ const StoryViewer = ({ stories, initialStoryIndex, isOpen, onClose }: StoryViewe
       <div className="absolute top-8 left-4 right-4 flex items-center justify-between z-10">
         <div className="flex items-center gap-3">
           <Image
-            src={currentStory.user.avatar || "/noAvatar.png"}
+            src={getImageSrc(currentStory.user.avatar, "/noAvatar.png")}
             alt={currentStory.user.name || currentStory.user.username}
             width={40}
             height={40}
             className="rounded-full object-cover"
+            onError={() => handleImageError(currentStory.user.avatar || "")}
           />
           <div>
             <p className="text-white font-semibold text-sm">
@@ -169,11 +182,12 @@ const StoryViewer = ({ stories, initialStoryIndex, isOpen, onClose }: StoryViewe
         onTouchEnd={() => setIsPaused(false)}
       >
         <Image
-          src={currentStory.img}
+          src={getImageSrc(currentStory.img, "/noAvatar.png")}
           alt="Story"
           fill
           className="object-contain"
           priority
+          onError={() => handleImageError(currentStory.img || "")}
         />
       </div>
 
