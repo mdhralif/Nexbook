@@ -335,6 +335,7 @@ export const switchBlock = async (userId: string) => {
     if (!userId) throw new Error("User is not authenticated!");
   
     try {
+      // Delete any existing story for this user (keep it simple - one story per user)
       const existingStory = await prisma.story.findFirst({
         where: {
           userId,
@@ -348,6 +349,8 @@ export const switchBlock = async (userId: string) => {
           },
         });
       }
+
+      // Create new story
       const createdStory = await prisma.story.create({
         data: {
           userId,
@@ -359,6 +362,7 @@ export const switchBlock = async (userId: string) => {
         },
       });
   
+      revalidatePath("/");
       return createdStory;
     } catch (err) {
       console.log(err);
